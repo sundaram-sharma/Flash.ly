@@ -7,11 +7,20 @@ import android.content.Context;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -23,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     ImageButton flashLightMainButton, flashLightState, flashLightSosButton;
-    boolean state;
+    boolean state, state2;
+    long blinkDelay = 400;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             @Override
-            public void onClick(View view)
-            {
-
-                String myString = "0101010101";
-                long blinkDelay = 500; //Delay the blink in ms
-                for (int i = 0; i < myString.length(); i++)
+            public void onClick(View view) {
+                if (!state)
                 {
+                    flashLightState.setBackgroundResource(R.drawable.ic_sos2);
+                    String myString = "0101010101";
+                 //Delay the blink in ms
+                for (int i = 0; i < myString.length(); i++) {
                     if (myString.charAt(i) == '0') {
                         flashLightState.setBackgroundResource(R.drawable.torch_on);
                         try {
@@ -118,13 +128,15 @@ public class MainActivity extends AppCompatActivity {
                             cameraManager.setTorchMode(CameraId, true);
                             state = true;
 
-                        }
-                        catch (CameraAccessException e) {
+
+                        } catch (CameraAccessException e) {
                             e.printStackTrace();
                         }
 
 
                     } else {
+                        state2 = false;
+                        flashLightState.setBackgroundResource(R.drawable.ic_sos);
                         flashLightState.setBackgroundResource(R.drawable.torch_off);
                         try {
                             String CameraId = cameraManager.getCameraIdList()[0]; //0 back 1 front
@@ -132,8 +144,7 @@ public class MainActivity extends AppCompatActivity {
                             state = false;
 
 
-                        }
-                        catch (CameraAccessException e) {
+                        } catch (CameraAccessException e) {
                             e.printStackTrace();
                         }
 
@@ -145,9 +156,73 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                }
+                else
+                {
+                    CameraManager cameraManager =(CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+                    try
+                    {
+                        String CameraId=cameraManager.getCameraIdList()[0]; //0 back 1 front
+                        cameraManager.setTorchMode(CameraId, false);
+                        state=false;
+
+                        flashLightState.setBackgroundResource(R.drawable.torch_off);
+                    }
+                    catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
+        // long press
+        flashLightSosButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                // TODO Auto-generated method stub
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, flashLightSosButton);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem)
+                    {
+                        // Toast message on menu item clicked
+
+                        Toast.makeText(MainActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+
+                        String temp1 = menuItem.toString();
+
+                        if(temp1.equals("Slow"))
+                        {
+                            blinkDelay = 800;
+                            Log.d("myTag", "Delay by 800");
+                        }
+                        else if(temp1.equals("Medium"))
+                        {
+                            blinkDelay = 400;
+                            Log.d("myTag", "Delay by 400");
+                        }
+                        else if(temp1.equals("Fast"))
+                        {
+                            blinkDelay = 150;
+                            Log.d("myTag", "Delay by 150");
+                        }
+                        else if(temp1.equals("Ultra Fast"))
+                        {
+                            blinkDelay = 50;
+                            Log.d("myTag", "Delay by 50");
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+                return true;
+
+
+            }
+        });
 
     }
 }
