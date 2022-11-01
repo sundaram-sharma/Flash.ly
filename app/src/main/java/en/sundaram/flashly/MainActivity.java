@@ -1,5 +1,7 @@
 package en.sundaram.flashly;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -36,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
     long blinkDelay = 400;
     String myString = "0101010101";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         flashLightState =findViewById(R.id.lightState);
         flashLightSosButton = findViewById(R.id.btnSos); //SOS button
@@ -61,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).check();
+
+
+        // to make the Navigation drawer icon always appear on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void runFlashLight()
