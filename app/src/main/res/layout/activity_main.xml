@@ -23,12 +23,12 @@
        android:alpha="0"/>
 
    <ImageButton
-      android:id="@+id/btnSos"
+       android:id="@+id/btnSos"
        android:layout_width="50dp"
        android:layout_height="50dp"
-      android:background="@null"
-       android:layout_marginTop="500dp"
-       android:layout_marginStart="178dp"
-      android:src="@drawable/ic_sos"/>
+       android:layout_marginStart="320dp"
+       android:layout_marginTop="580dp"
+       android:background="@null"
+       android:src="@drawable/ic_sos2" />
 
 </FrameLayout>

@@ -15,6 +15,6 @@
 
     <item
         android:id="@+id/react_native"
-        android:title="Ultra Fast" />
+        android:title="Random" />
 
 </menu>

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton flashLightMainButton, flashLightState, flashLightSosButton;
     boolean state, state2;
     long blinkDelay = 400;
+    String myString = "0101010101";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!state)
                 {
                     flashLightState.setBackgroundResource(R.drawable.ic_sos2);
-                    String myString = "0101010101";
+
                  //Delay the blink in ms
                 for (int i = 0; i < myString.length(); i++) {
                     if (myString.charAt(i) == '0') {
@@ -134,14 +135,17 @@ public class MainActivity extends AppCompatActivity {
                         }
 
 
-                    } else {
+                    }
+                    else
+                    {
                         state2 = false;
-                        flashLightState.setBackgroundResource(R.drawable.ic_sos);
-                        flashLightState.setBackgroundResource(R.drawable.torch_off);
+
                         try {
                             String CameraId = cameraManager.getCameraIdList()[0]; //0 back 1 front
                             cameraManager.setTorchMode(CameraId, false);
                             state = false;
+                            flashLightState.setBackgroundResource(R.drawable.ic_sos);
+                            flashLightState.setBackgroundResource(R.drawable.torch_off);
 
 
                         } catch (CameraAccessException e) {
@@ -196,22 +200,26 @@ public class MainActivity extends AppCompatActivity {
 
                         if(temp1.equals("Slow"))
                         {
+                            myString = "01010101";
                             blinkDelay = 800;
                             Log.d("myTag", "Delay by 800");
                         }
                         else if(temp1.equals("Medium"))
                         {
+                            myString = "01010101010101";
                             blinkDelay = 400;
                             Log.d("myTag", "Delay by 400");
                         }
                         else if(temp1.equals("Fast"))
                         {
-                            blinkDelay = 150;
+                            myString = "010101010101010101010101010101010101010101";
+                            blinkDelay = 100;
                             Log.d("myTag", "Delay by 150");
                         }
-                        else if(temp1.equals("Ultra Fast"))
+                        else if(temp1.equals("Random"))
                         {
-                            blinkDelay = 50;
+                            myString = "01100001111000101000011100100111000101100000111100101011011100101011110000011101010000101110011000";
+                            blinkDelay = 120;
                             Log.d("myTag", "Delay by 50");
                         }
                         return true;
